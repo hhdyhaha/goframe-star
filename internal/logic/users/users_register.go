@@ -6,6 +6,7 @@ import (
 	"goframe-star/internal/model/do"
 )
 
+// 用户注册
 func (u *Users) Register(ctx context.Context, username, password, email string) error {
 	_, err := dao.Users.Ctx(ctx).Data(do.Users{
 		Username: username,

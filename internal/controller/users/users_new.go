@@ -15,6 +15,7 @@ type ControllerV1 struct {
 
 func NewV1() users.IUsersV1 {
 	return &ControllerV1{
+		// 初始化用户逻辑层
 		users: userLogic.New(),
 	}
 }
