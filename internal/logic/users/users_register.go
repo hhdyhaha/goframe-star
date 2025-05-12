@@ -7,17 +7,23 @@ import (
 	"goframe-star/internal/model/do"
 )
 
-// 用户注册
-func (u *Users) Register(ctx context.Context, username, password, email string) error {
+type RegisterInput struct {
+	Username string
+	Password string
+	Email    string
+}
 
-	if err := u.checkUser(ctx, username); err != nil {
+// 用户注册
+func (u *Users) Register(ctx context.Context, in RegisterInput) error {
+
+	if err := u.checkUser(ctx, in.Username); err != nil {
 		return err
 	}
 
 	_, err := dao.Users.Ctx(ctx).Data(do.Users{
-		Username: username,
-		Password: u.encryptPassword(password),
-		Email:    email,
+		Username: in.Username,
+		Password: u.encryptPassword(in.Password),
+		Email:    in.Email,
 	}).Insert()
 
 	if err != nil {
