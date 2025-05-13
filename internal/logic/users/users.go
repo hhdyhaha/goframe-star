@@ -11,6 +11,7 @@ func New() *Users {
 	return &Users{}
 }
 
+// 加密密码
 func (u *Users) encryptPassword(password string) string {
 	return gmd5.MustEncryptString(password)
 }
