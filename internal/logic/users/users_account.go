@@ -64,3 +64,12 @@ func (u *Users) Info(ctx context.Context) (user *entity.Users, err error) {
 	}
 	return
 }
+
+// 获取uid
+func (u *Users) GetUid(ctx context.Context) (uint, error) {
+	user, err := u.Info(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return user.Id, nil
+}

@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"goframe-star/internal/controller/account"
+	"goframe-star/internal/controller/words"
 	"goframe-star/internal/logic/middleware"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -28,6 +29,7 @@ var (
 						group.Middleware(middleware.Auth)
 						group.Bind(
 							account.NewV1(),
+							words.NewV1(),
 						)
 					})
 				})
