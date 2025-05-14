@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/frame/g"
 	"goframe-star/internal/consts"
 	"goframe-star/internal/model/entity"
 	"time"
@@ -49,4 +50,17 @@ func (u *Users) Login(ctx context.Context, username, password string) (tokenstri
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, uc)
 
 	return token.SignedString([]byte(consts.JwtKey))
+}
+
+// 获取用户信息
+func (u *Users) Info(ctx context.Context) (user *entity.Users, err error) {
+	tokenString := g.RequestFromCtx(ctx).Request.Header.Get("Authorization")
+	tokenClaims, _ := jwt.ParseWithClaims(tokenString, &jwtClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(consts.JwtKey), nil
+	})
+
+	if claims, ok := tokenClaims.Claims.(*jwtClaims); ok && tokenClaims.Valid {
+		err = dao.Users.Ctx(ctx).Where("id", claims.Id).Scan(&user)
+	}
+	return
 }
