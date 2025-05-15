@@ -127,3 +127,17 @@ func (w *Words) List(ctx context.Context, in ListInput) (list []entity.Words, to
 	}
 	return
 }
+
+// 单词详情
+func (w *Words) Detail(ctx context.Context, uid, id uint) (word *entity.Words, err error) {
+	var (
+		cls = dao.Words.Columns()
+		orm = dao.Words.Ctx(ctx)
+	)
+	orm = orm.Where(cls.Id, id)
+	if uid > 0 {
+		orm = orm.Where(cls.Uid, uid)
+	}
+	err = orm.Scan(&word)
+	return
+}

@@ -1,6 +1,9 @@
 package v1
 
-import "github.com/gogf/gf/v2/frame/g"
+import (
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
+)
 
 type ProficiencyLevel uint
 
@@ -59,4 +62,22 @@ type ListReq struct {
 type ListRes struct {
 	List  []List `json:"list"`
 	Total uint   `json:"total"`
+}
+
+// 单词详情
+type DetailReq struct {
+	g.Meta `path:"words/{id}" method:"get" sm:"详情" tags:"单词"`
+	Id     uint `json:"id" v:"required"`
+}
+
+type DetailRes struct {
+	Id                 uint             `json:"id"`
+	Word               string           `json:"word"`
+	Definition         string           `json:"definition"`
+	ExampleSentence    string           `json:"exampleSentence"`
+	ChineseTranslation string           `json:"chineseTranslation"`
+	Pronunciation      string           `json:"pronunciation"`
+	ProficiencyLevel   ProficiencyLevel `json:"proficiencyLevel"`
+	CreatedAt          *gtime.Time      `json:"createdAt"`
+	UpdatedAt          *gtime.Time      `json:"updatedAt"`
 }
