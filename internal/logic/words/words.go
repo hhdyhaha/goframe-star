@@ -53,3 +53,39 @@ func (w *Words) Create(ctx context.Context, in CreateInput) error {
 	}
 	return nil
 }
+
+// 编辑单词
+type UpdateInput struct {
+	Uid                uint
+	Word               string
+	Definition         string
+	ExampleSentence    string
+	ChineseTranslation string
+	Pronunciation      string
+	ProficiencyLevel   v1.ProficiencyLevel
+}
+
+// 编辑单词
+func (w *Words) Update(ctx context.Context, id uint, in UpdateInput) error {
+	var cls = dao.Words.Columns()
+	count, err := dao.Words.Ctx(ctx).Where(cls.Uid, in.Uid).Where(cls.Word, in.Word).WhereNot(cls.Id, id).Count()
+	if err != nil {
+		return err
+	}
+	if count > 0 {
+		return gerror.New("单词已存在")
+	}
+
+	_, err = dao.Words.Ctx(ctx).Data(do.Words{
+		Word:               in.Word,
+		Definition:         in.Definition,
+		ExampleSentence:    in.ExampleSentence,
+		ChineseTranslation: in.ChineseTranslation,
+		Pronunciation:      in.Pronunciation,
+		ProficiencyLevel:   in.ProficiencyLevel,
+	}).Where(cls.Id, id).Where(cls.Uid, in.Uid).Update()
+	if err != nil {
+		return err
+	}
+	return nil
+}
